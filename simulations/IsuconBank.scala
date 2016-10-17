@@ -6,9 +6,13 @@ import io.gatling.http.Predef._
 import io.gatling.jdbc.Predef._
 
 class IsuconBank extends Simulation {
-
+	val baseUrl = System.getProperty("baseUrl")
+	val actors = 20
+println(baseUrl)
 	val httpProtocol = http
-		.baseURL("http://localhost")
+		//.baseURL("http://localhost")
+		//.baseURL("http://192.168.99.100")
+		.baseURL(baseUrl)
 		.inferHtmlResources()
 		.acceptHeader("text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")
 		.acceptEncodingHeader("gzip, deflate")
@@ -20,17 +24,18 @@ class IsuconBank extends Simulation {
 			http("top")
 			.get("/")
 			.check(status.is(200))
-//		).exec(http("login-fail")
-//			.post("/login")
-//			.formParam("login", "dummy_u")
-//			.formParam("password", "dummy_p")
-//            .check(regex( """Wrong username or password"""))
-        ).exec(http("login-success")
+		).exec(http("login-success")
 			.post("/login")
 			.formParam("login", "isucon8")
 			.formParam("password", "isuconpass8")
-            .check(regex( """ログインに成功しました。"""))
+			.check(regex( """ログインに成功しました。"""))
 		)
-	setUp(scn.inject(atOnceUsers(3))).protocols(httpProtocol)
 
+	// execute
+	setUp(
+		scn.inject(
+			rampUsersPerSec(1) to (actors) during (1 seconds),
+			constantUsersPerSec(actors) during(5 seconds)
+	  	)
+	).protocols(httpProtocol)
 }
