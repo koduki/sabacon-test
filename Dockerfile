@@ -1,4 +1,3 @@
-#FROM httpd:2.4
 FROM ubuntu
 
 # Install base
@@ -24,7 +23,7 @@ RUN mkdir /script
 ADD docker-entrypoint.sh /script/docker-entrypoint.sh
 RUN chmod a+x /script/*
 
-# Add senario and score-logic
+# Add senario and scoring-logic
 ADD simulations /opt/gatling/user-files/simulations
 ADD scoring.sh /script/scoring.sh
 RUN chmod a+x /script/scoring.sh

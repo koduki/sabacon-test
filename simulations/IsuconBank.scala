@@ -8,10 +8,10 @@ import io.gatling.jdbc.Predef._
 class IsuconBank extends Simulation {
 	val baseUrl = System.getProperty("baseUrl")
 	val actors = 20
-println(baseUrl)
+	println(baseUrl)
+	println("actors:" + actors)
+
 	val httpProtocol = http
-		//.baseURL("http://localhost")
-		//.baseURL("http://192.168.99.100")
 		.baseURL(baseUrl)
 		.inferHtmlResources()
 		.acceptHeader("text/html,application/xhtml+xml,application/xml;q=0.9,image/webp,*/*;q=0.8")
